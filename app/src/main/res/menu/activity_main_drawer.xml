@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+    <group
+        android:id="@+id/group1"
+        android:checkableBehavior="single">
+    <item
+        android:id="@+id/nav_my_profile"
+        android:icon="@drawable/ic_nav_user"
+        android:checkable="true"
+        android:title="@string/my_profile"/>
+
+    <item
+        android:id="@+id/nav_sign_out"
+        android:checkable="true"
+        android:icon="@drawable/ic_nav_sign_out"
+        android:title="@string/sign_out"/>
+
+    </group>
+
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group2"
+        >
+    <item android:id="@+id/nav_favourites"
+        android:checkable="true"
+        android:icon="@drawable/ic_favourites"
+        android:title="@string/favourites"/>
+
+    <item
+        android:id="@+id/nav_calendar"
+        android:checkable="true"
+        android:icon="@drawable/ic_nav_calendar"
+        android:title="@string/calendar"/>
+
+    <item
+        android:id="@+id/nav_cot"
+        android:checkable="true"
+        android:icon="@drawable/ic_nav_cot"
+        android:title="@string/cot_reports"/>
+
+    <item
+        android:id="@+id/nav_rankings"
+        android:checkable="true"
+        android:icon="@drawable/ic_nav_rankings"
+        android:title="@string/rankings"/>
+
+    <item android:id="@+id/nav_break_even"
+        android:checkable="true"
+        android:icon="@drawable/profit"
+        android:title="@string/breakeven"/>
+
+    <item
+        android:id="@+id/nav_quantum_screener"
+        android:checkable="true"
+        android:icon="@drawable/ic_quamtum_screener"
+        android:title="@string/quantum_screener"
+        />
+
+    </group>
+
+    <group android:checkableBehavior="single"
+        android:id="@+id/group3"
+        >
+
+    <item
+        android:id="@+id/nav_subscription"
+        android:checkable="true"
+        android:icon="@drawable/ic_nav_subscription"
+        android:title="@string/subscriptions"/>
+    </group>
+
+
+
+</menu>

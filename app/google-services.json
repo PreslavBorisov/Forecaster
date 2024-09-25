@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "867761181412",
+    "project_id": "forecaster-exaplme",
+    "storage_bucket": "forecaster-exaplme.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:867761181412:android:1cada37e7088f475c452f1",
+        "android_client_info": {
+          "package_name": "eu.example.forcaster"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyB0F_nq3NRg5pVUIPj5zXKdFo9PvMl4dCg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
