@@ -31,9 +31,6 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
     private lateinit var mSharedPreferences: SharedPreferences
     private val stockList : ArrayList<Favorite> = ArrayList()
 
-
-
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -117,7 +114,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
                 startActivity(Intent(this@MainActivity,RankingsActivity::class.java))
             }
             R.id.nav_break_even ->{
-
+                startActivity(Intent(this@MainActivity,BreakEvenActivity::class.java))
             }
             R.id.nav_quantum_screener ->{
 

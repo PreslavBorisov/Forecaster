@@ -52,4 +52,8 @@
     <string name="asia">Asia</string>
     <string name="oceania">Oceania</string>
     <string name="tag">Tag</string>
+    <string name="us_government_tracker">US Government Tracker</string>
+    <string name="breakeven_title">Breakeven</string>
+    <string name="all_countries">All Countries</string>
+    <string name="select">select</string>
 </resources>

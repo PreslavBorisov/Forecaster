@@ -59,6 +59,11 @@
         android:title="@string/quantum_screener"
         />
 
+        <item android:id="@+id/nav_us_government_tracker"
+            android:checkable="true"
+            android:icon="@drawable/ic_vector_us_government_tracker_money_24"
+            android:title="@string/us_government_tracker"/>
+
     </group>
 
     <group android:checkableBehavior="single"
