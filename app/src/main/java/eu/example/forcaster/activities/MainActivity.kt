@@ -114,7 +114,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
                 startActivity(Intent(this@MainActivity,COTReportsActivity::class.java))
             }
             R.id.nav_rankings ->{
-
+                startActivity(Intent(this@MainActivity,RankingsActivity::class.java))
             }
             R.id.nav_break_even ->{
 
