@@ -63,9 +63,9 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         }else{
             binding?.drawerLayout!!.openDrawer(GravityCompat.START)
         }
-    }
+     }
 
-    private fun onBackPressedNew(){
+    fun onBackPressedNew(){
         onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
                 if(binding?.drawerLayout?.isDrawerOpen(GravityCompat.START)==true){
@@ -95,6 +95,9 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            R.id.homePageButton ->{
+                startActivity(Intent(this@MainActivity,MainActivity::class.java))
+            }
             R.id.nav_my_profile ->{
                 startActivity(Intent(this@MainActivity,MyProfileActivity::class.java))
             }
@@ -117,6 +120,9 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
                 startActivity(Intent(this@MainActivity,BreakEvenActivity::class.java))
             }
             R.id.nav_quantum_screener ->{
+                startActivity(Intent(this@MainActivity,QuantumScreenerActivity::class.java))
+            }
+            R.id.ai_assitence ->{
 
             }
             R.id.nav_subscription ->{
@@ -127,7 +133,7 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         return true
     }
 
-    private fun signOutDialog(){
+     private fun signOutDialog(){
         val dialog = Dialog(this@MainActivity)
 
         dialog.setContentView(R.layout.dialog_sign_out)
@@ -148,22 +154,20 @@ class MainActivity : BaseActivity(),NavigationView.OnNavigationItemSelectedListe
         dialog.show()
     }
 
-    private fun favoriteDialog(){
+     private fun favoriteDialog(){
 
         val favList:ArrayList<Favorite> = stockList
 
         val dialog =object :FavoriteDialog(
-            this@MainActivity,
+            this,
             favList,
             "Favorite stocks"
         ){
             override fun onItemSelected(item: Favorite) {
-                //ToDo intend to stock activity
+                //ToDo add some new features as a buttons for deleting and intent to stock overview
             }
 
         }
         dialog.show()
     }
-
-
 }

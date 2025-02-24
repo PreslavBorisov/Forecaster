@@ -4,6 +4,19 @@
 
 
     <group
+        android:id="@+id/homePage"
+        android:checkableBehavior="single">
+
+        <item
+            android:id="@+id/homePageButton"
+            android:checkable="true"
+            android:title="@string/home"
+            android:icon="@drawable/ic_nav_menu_home"
+            />
+
+    </group>
+
+    <group
         android:id="@+id/group1"
         android:checkableBehavior="single">
     <item
@@ -59,10 +72,18 @@
         android:title="@string/quantum_screener"
         />
 
-        <item android:id="@+id/nav_us_government_tracker"
+        <item
+            android:id="@+id/nav_us_government_tracker"
             android:checkable="true"
             android:icon="@drawable/ic_vector_us_government_tracker_money_24"
             android:title="@string/us_government_tracker"/>
+
+        <item
+            android:id="@+id/ai_assitence"
+            android:checkable="true"
+            android:title="@string/ai_agent"
+            android:icon="@drawable/ai_agent_icon"
+            />
 
     </group>
 
@@ -76,7 +97,5 @@
         android:icon="@drawable/ic_nav_subscription"
         android:title="@string/subscriptions"/>
     </group>
-
-
 
 </menu>

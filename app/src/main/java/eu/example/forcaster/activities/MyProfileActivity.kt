@@ -5,6 +5,7 @@ import android.app.Activity
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.Uri
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
@@ -43,17 +44,7 @@ class MyProfileActivity : BaseActivity() {
         FireStoreClass().loadUserData(this)
 
         binding?.ivProfileUserImage?.setOnClickListener{
-            if(ContextCompat.checkSelfPermission(this,
-                    Manifest.permission.READ_EXTERNAL_STORAGE)
-                ==PackageManager.PERMISSION_GRANTED){
-                Constants.showImageChooser(this@MyProfileActivity)
-            }else{
-                ActivityCompat.requestPermissions(
-                    this,
-                    arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE),
-                    Constants.READ_STORAGE_PERMISSION_CODE
-                )
-            }
+            checkGalleryPermissionsAndOpenImageChooser()
         }
 
         binding?.btnUpdateMyProfile?.setOnClickListener {
@@ -61,12 +52,28 @@ class MyProfileActivity : BaseActivity() {
                 uploadUserImage()
             }else{
                 showProgressDialog()
-
                 updateUserProfileData()
             }
         }
     }
 
+    private fun checkGalleryPermissionsAndOpenImageChooser() {
+        val permission = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            Manifest.permission.READ_MEDIA_IMAGES
+        } else {
+            Manifest.permission.READ_EXTERNAL_STORAGE
+        }
+
+        if (ContextCompat.checkSelfPermission(this, permission) == PackageManager.PERMISSION_GRANTED) {
+            Constants.showImageChooser(this@MyProfileActivity)
+        } else {
+            ActivityCompat.requestPermissions(
+                this,
+                arrayOf(permission),
+                Constants.READ_STORAGE_PERMISSION_CODE
+            )
+        }
+    }
     override fun onRequestPermissionsResult(
         requestCode: Int,
         permissions: Array<out String>,
@@ -86,8 +93,6 @@ class MyProfileActivity : BaseActivity() {
                 Toast.LENGTH_LONG).show()
         }
     }
-
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -129,7 +134,6 @@ class MyProfileActivity : BaseActivity() {
 
     }
 
-
     fun setUserDataUI(user: User){
 
         mUserDetails = user
@@ -143,6 +147,7 @@ class MyProfileActivity : BaseActivity() {
 
         binding?.etNameMyProfile?.setText(user.name)
         binding?.etEmailMyProfile?.setText(user.email)
+
         if(user.mobile != 0L){
             binding?.etMobileMyProfile?.setText(user.mobile.toString())
         }
@@ -196,8 +201,6 @@ class MyProfileActivity : BaseActivity() {
             }
         }
     }
-
-
 
     fun profileUpdateSuccess(){
         hideProgressDialog()

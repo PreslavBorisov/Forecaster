@@ -16,7 +16,7 @@ class RankingItemAdapter(
     private val rankingsItemList: MutableList<RankingItem>
 ): RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
-    private var onClickItemRankingListener: onClickItemListener? = null
+    private var onClickItemRankingListener: OnClickItemListener? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
       return MyViewHolder(LayoutInflater.from(context)
@@ -37,6 +37,8 @@ class RankingItemAdapter(
                 .placeholder(R.drawable.ic_board_place_holder)
                 .into(holder.civRankingsImage)
 
+
+
             holder.titleRankings.text = item.title
             holder.tagRankings.text = item.tag
 
@@ -50,11 +52,11 @@ class RankingItemAdapter(
 
     private class MyViewHolder(view: View): RecyclerView.ViewHolder(view){
         val titleRankings:TextView = itemView.findViewById(R.id.title_item_rankings)
-        val tagRankings:TextView= itemView.findViewWithTag(R.id.tag_item_rankings)
+        val tagRankings:TextView= itemView.findViewById(R.id.tag_item_rankings)
         val civRankingsImage: CircleImageView = itemView.findViewById(R.id.civ_rankings_item_image)
     }
 
-    interface onClickItemListener{
+    interface OnClickItemListener{
         fun onClick(position: Int,model: RankingItem)
     }
 }

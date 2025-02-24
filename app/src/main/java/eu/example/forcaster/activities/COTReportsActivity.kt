@@ -1,15 +1,33 @@
 package eu.example.forcaster.activities
 
-import androidx.appcompat.app.AppCompatActivity
+import android.app.Dialog
+import android.content.Context
+import android.content.Intent
+import android.content.SharedPreferences
 import android.os.Bundle
+import android.view.MenuItem
 import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.RadioGroup
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.widget.Toolbar
+import androidx.cardview.widget.CardView
+import androidx.core.view.GravityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.navigation.NavigationView
+import com.google.firebase.auth.FirebaseAuth
 import eu.example.forcaster.R
 import eu.example.forcaster.adapters.CotReportsItemsAdapter
 import eu.example.forcaster.databinding.ActivityCotreportsBinding
+import eu.example.forcaster.dialogs.FavoriteDialog
+import eu.example.forcaster.firebase.FireStoreClass
 import eu.example.forcaster.models.COTItem
+import eu.example.forcaster.models.Favorite
+import eu.example.forcaster.utils.Constants
 
-class COTReportsActivity : AppCompatActivity() {
+class COTReportsActivity :  BaseActivity(), NavigationView.OnNavigationItemSelectedListener {
 
     private var binding: ActivityCotreportsBinding? = null
     private var currenciesList: MutableList<COTItem> = mutableListOf()
@@ -28,6 +46,8 @@ class COTReportsActivity : AppCompatActivity() {
     private var naturalGasProductsList: MutableList<COTItem> = mutableListOf()
 
     private var syntheticCurrenciesList: MutableList<COTItem> = mutableListOf()
+    private lateinit var mSharedPreferences: SharedPreferences
+    private val stockList : ArrayList<Favorite> = ArrayList()
 
     override fun onCreate(savedInstanceState: Bundle?) {
 
@@ -37,8 +57,15 @@ class COTReportsActivity : AppCompatActivity() {
         setContentView(binding?.root)
 
         setUpActionBar()
+        onBackPressedNew()
+        binding?.navViewCotReports?.setNavigationItemSelectedListener(this)
+
+        mSharedPreferences = this.getSharedPreferences(
+            Constants.FORECASTER_PREFERENCES, Context.MODE_PRIVATE)
+
+        FireStoreClass().loadUserData(this@COTReportsActivity)
         currenciesList = currenciesItemList()
-        val rvCurrenciesList = binding?.rvCurrenciesCotreports
+        val rvCurrenciesList = findViewById<RecyclerView>(R.id.rv_currencies_cotreports)
         rvCurrenciesList?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,currenciesList)
 
@@ -46,7 +73,7 @@ class COTReportsActivity : AppCompatActivity() {
 
 
         agricultureList = agricultureItemList()
-        val rvAgricultureList = binding?.rvAgricultureCotreports
+        val rvAgricultureList = findViewById<RecyclerView>(R.id.rv_agriculture_cotreports)
         rvAgricultureList?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,agricultureList)
 
@@ -54,7 +81,7 @@ class COTReportsActivity : AppCompatActivity() {
 
 
         metalsAndOtherList = metalsAndOtherItemList()
-        val rvMetalsAndOtherList = binding?.rvMetalsandOtherCotreports
+        val rvMetalsAndOtherList = findViewById<RecyclerView>(R.id.rv_MetalsandOther_cotreports)
         rvMetalsAndOtherList?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,metalsAndOtherList)
 
@@ -62,7 +89,8 @@ class COTReportsActivity : AppCompatActivity() {
 
 
         stockIndexesList = stockIndexesItemList()
-        val rvStockIndexesList = binding?.rvStockIndexesCotreports
+        val rvStockIndexesList = findViewById<RecyclerView>(R.id.rv_StockIndexes_cotreports)
+
         rvStockIndexesList?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,stockIndexesList)
 
@@ -70,48 +98,61 @@ class COTReportsActivity : AppCompatActivity() {
 
 
         petroleumProductsList = petroleumProductsItemList()
-        val rvPetroleumProductsList = binding?.rvPetroleumProductsCotreports
+        val rvPetroleumProductsList = findViewById<RecyclerView>(R.id.rv_PetroleumProducts_cotreports)
+
         rvPetroleumProductsList?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,petroleumProductsList)
 
         rvPetroleumProductsList?.adapter = adapterCOTReports
 
         treasuriesRatesList = treasuriesRatesItemList()
-        val rvTreasuriesRatesList = binding?.rvTreasuriesandRatesCotreports
+        val rvTreasuriesRatesList = findViewById<RecyclerView>(R.id.rv_TreasuriesandRates_cotreports)
+
         rvTreasuriesRatesList?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,treasuriesRatesList)
 
         rvTreasuriesRatesList?.adapter = adapterCOTReports
 
         naturalGasProductsList = naturalGasProductsItemList()
-        val rvNaturalGasProducts = binding?.rvNaturalGasProductsCotreports
+        val rvNaturalGasProducts =findViewById<RecyclerView>(R.id.rv_NaturalGasProducts_cotreports)
+
         rvNaturalGasProducts?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,naturalGasProductsList)
 
         rvNaturalGasProducts?.adapter = adapterCOTReports
 
         syntheticCurrenciesList = syntheticCurrenciesItemList()
-        val rvSyntheticCurrencyList = binding?.rvSyntheticCurrenciesCotreports
+        val rvSyntheticCurrencyList = findViewById<RecyclerView>(R.id.rv_synthetic_currencies_cotreports)
+
         rvSyntheticCurrencyList?.layoutManager = LinearLayoutManager(this@COTReportsActivity)
         adapterCOTReports = CotReportsItemsAdapter(this@COTReportsActivity,syntheticCurrenciesList)
 
         rvSyntheticCurrencyList?.adapter = adapterCOTReports
 
-        binding?.rgReports?.setOnCheckedChangeListener { _, checkedId:Int ->
+        val rgReports = findViewById<RadioGroup>(R.id.rg_reports)
+
+        val llSelectedSynthetic = findViewById<LinearLayout>(R.id.ll_selected_synthetic)
+        val llOfficialSelectedCurrenciesAgriculture = findViewById<LinearLayout>(R.id.ll_official_selected_currencies_agricultire)
+        val llOfficialSelectedNaturalGas = findViewById<LinearLayout>(R.id.ll_official_selected_natural_gas)
+        val llOfficialSelectedStockMetals = findViewById<LinearLayout>(R.id.ll_official_selected_Stock_Metals)
+        val llOfficialSelectedPetroleumTreasuries = findViewById<LinearLayout>(R.id.ll_official_selected_petroleum_treasuries)
+        val civInformationSynthetic = findViewById<CardView>(R.id.civ_information_synthetic)
+
+        rgReports.setOnCheckedChangeListener { _, checkedId:Int ->
             if (checkedId == R.id.rbOfficial){
-                binding?.llSelectedSynthetic?.visibility = View.GONE
-                binding?.civInformationSynthetic?.visibility = View.GONE
-                binding?.llOfficialSelectedCurrenciesAgricultire?.visibility = View.VISIBLE
-                binding?.llOfficialSelectedNaturalGas?.visibility = View.VISIBLE
-                binding?.llOfficialSelectedStockMetals?.visibility=View.VISIBLE
-                binding?.llOfficialSelectedPetroleumTreasuries?.visibility =View.VISIBLE
+                llSelectedSynthetic.visibility = View.GONE
+                civInformationSynthetic?.visibility = View.GONE
+                llOfficialSelectedCurrenciesAgriculture?.visibility = View.VISIBLE
+                llOfficialSelectedNaturalGas?.visibility = View.VISIBLE
+                llOfficialSelectedStockMetals?.visibility=View.VISIBLE
+               llOfficialSelectedPetroleumTreasuries?.visibility =View.VISIBLE
             }else{
-                binding?.civInformationSynthetic?.visibility = View.VISIBLE
-                binding?.llSelectedSynthetic?.visibility = View.VISIBLE
-                binding?.llOfficialSelectedCurrenciesAgricultire?.visibility = View.GONE
-                binding?.llOfficialSelectedNaturalGas?.visibility = View.GONE
-                binding?.llOfficialSelectedStockMetals?.visibility = View.GONE
-                binding?.llOfficialSelectedPetroleumTreasuries?.visibility = View.GONE
+                civInformationSynthetic?.visibility = View.VISIBLE
+                llSelectedSynthetic?.visibility = View.VISIBLE
+                llOfficialSelectedCurrenciesAgriculture?.visibility = View.GONE
+                llOfficialSelectedNaturalGas?.visibility = View.GONE
+                llOfficialSelectedStockMetals?.visibility = View.GONE
+                llOfficialSelectedPetroleumTreasuries?.visibility = View.GONE
             }
 
         }
@@ -126,15 +167,33 @@ class COTReportsActivity : AppCompatActivity() {
     }
 
     private fun setUpActionBar(){
-        setSupportActionBar(binding?.toolbarCotreportsActivity)
-        val action = supportActionBar
-        if(action!=null){
-            action.setHomeAsUpIndicator(R.drawable.ic_vector_back)
-            action.setDisplayHomeAsUpEnabled(true)
+        val toolbar = findViewById<Toolbar>(R.id.toolbar_cotreports_activity)
+        setSupportActionBar(toolbar)
+
+        toolbar.setNavigationIcon(R.drawable.ic_action_navigation_menu)
+
+        toolbar.setNavigationOnClickListener {
+            toggleDrawer()
         }
-        binding?.toolbarCotreportsActivity?.setNavigationOnClickListener {
-            onBackPressedDispatcher.onBackPressed()
+    }
+    private fun toggleDrawer(){
+        if(binding?.drawerLayout!!.isDrawerOpen(GravityCompat.START)){
+            binding?.drawerLayout!!.closeDrawer(GravityCompat.START)
+        }else{
+            binding?.drawerLayout!!.openDrawer(GravityCompat.START)
         }
+    }
+
+    private fun onBackPressedNew(){
+        onBackPressedDispatcher.addCallback(this,object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if(binding?.drawerLayout?.isDrawerOpen(GravityCompat.START)==true){
+                    binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+                }else{
+                    doubleBackToExit()
+                }
+            }
+        })
     }
 
     //This information has to be loaded from api data. This hardcoded lists are for testing purposes
@@ -227,4 +286,80 @@ class COTReportsActivity : AppCompatActivity() {
 
         return syntheticCurrenciesList
     }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.homePageButton ->{
+                startActivity(Intent(this@COTReportsActivity,MainActivity::class.java))
+            }
+            R.id.nav_my_profile ->{
+                startActivity(Intent(this@COTReportsActivity,MyProfileActivity::class.java))
+            }
+            R.id.nav_sign_out ->{
+                signOutDialog()
+            }
+            R.id.nav_favourites ->{
+                favoriteDialog()
+            }
+            R.id.nav_calendar ->{
+                startActivity(Intent(this@COTReportsActivity,CalendarActivity::class.java))
+            }
+            R.id.nav_cot ->{
+                startActivity(Intent(this@COTReportsActivity,COTReportsActivity::class.java))
+            }
+            R.id.nav_rankings ->{
+                startActivity(Intent(this@COTReportsActivity,RankingsActivity::class.java))
+            }
+            R.id.nav_break_even ->{
+                startActivity(Intent(this@COTReportsActivity,BreakEvenActivity::class.java))
+            }
+            R.id.nav_quantum_screener ->{
+                startActivity(Intent(this@COTReportsActivity,QuantumScreenerActivity::class.java))
+            }
+            R.id.nav_subscription ->{
+
+            }
+        }
+        binding?.drawerLayout?.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+    private fun signOutDialog(){
+        val dialog = Dialog(this@COTReportsActivity)
+
+        dialog.setContentView(R.layout.dialog_sign_out)
+
+        dialog.findViewById<Button>(R.id.btn_no).setOnClickListener {
+            dialog.dismiss()
+        }
+        dialog.findViewById<Button>(R.id.btn_yes).setOnClickListener{
+            FirebaseAuth.getInstance().signOut()
+
+            mSharedPreferences.edit().clear().apply()
+
+            val intent = Intent(this@COTReportsActivity,IntroActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_NEW_TASK)
+            startActivity(intent)
+            finish()
+        }
+        dialog.show()
+    }
+
+    private fun favoriteDialog(){
+
+        val favList:ArrayList<Favorite> = stockList
+
+        val dialog =object : FavoriteDialog(
+            this,
+            favList,
+            "Favorite stocks"
+        ){
+            override fun onItemSelected(item: Favorite) {
+                //ToDo add some new features as a buttons for deleting and intent to stock overview
+            }
+
+        }
+        dialog.show()
+    }
+
 }

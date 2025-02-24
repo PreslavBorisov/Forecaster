@@ -37,7 +37,9 @@
                 android:layout_height="wrap_content"
                 android:src="@drawable/ic_cotreport_vector"
                 android:contentDescription="@string/image_contentDescription"
-                android:layout_weight="1"/>
+                android:layout_weight="1"
+                android:layout_gravity="center"
+                />
 
         </LinearLayout>
 
